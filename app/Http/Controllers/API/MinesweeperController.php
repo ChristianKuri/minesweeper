@@ -26,7 +26,17 @@ class MinesweeperController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $size = 12;
+        $dificulty = 10; // higher is harder (between 1 and 100)
+        $mines = [];
+
+        for ($r = 0; $r < $size; $r++) {
+            for ($c = 0; $c < $size; $c++) {
+                $mines[$r][$c] = (int) !(rand(1, 100) > $dificulty);
+            }
+        }
+
+        auth()->user()->minesweepers()->create($mines);
     }
 
     /**

@@ -15,6 +15,8 @@ class CreateMinesweepersTable extends Migration
     {
         Schema::create('minesweepers', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->text('mines');
             $table->timestamps();
         });
     }
