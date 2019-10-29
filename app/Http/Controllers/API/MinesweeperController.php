@@ -19,15 +19,15 @@ class MinesweeperController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created minesweeper in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $size = 12;
-        $dificulty = 10; // higher is harder (between 1 and 100)
+        $size = $request->input('size') ?? 12;
+        $dificulty = $request->input('dificulty') ?? 10; // higher is harder (between 1 and 100)
         $mines = [];
 
         for ($r = 0; $r < $size; $r++) {
@@ -36,7 +36,9 @@ class MinesweeperController extends Controller
             }
         }
 
-        auth()->user()->minesweepers()->create($mines);
+        $request->user()->minesweepers()->create([
+            'mines' => serialize($mines)
+        ]);
     }
 
     /**
