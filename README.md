@@ -9,4 +9,4 @@ I didnt add validation since this is a fast project and it wasnt necesary
 - The dificulty accepts between 1 and 100 (higher is harder)
 
 ## Gonna publish the game tomorrow
-this is the url for the game pamekura.com
+this is the url for the game [pamekura.com](pamekura.com)
