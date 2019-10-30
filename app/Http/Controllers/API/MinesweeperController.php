@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Minesweeper as MinesweepersCollection;
 use App\Minesweeper;
 use Illuminate\Http\Request;
 
@@ -13,9 +14,9 @@ class MinesweeperController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return MinesweepersCollection::collection($request->user()->minesweepers);
     }
 
     /**
@@ -29,22 +30,26 @@ class MinesweeperController extends Controller
         $size = $request->input('size') ?? 12;
         $dificulty = $request->input('dificulty') ?? 15; // higher is harder (between 1 and 100)
         $mines = [];
+        $mines['status'] = 'open';
 
         for ($r = 0; $r < $size; $r++) {
             for ($c = 0; $c < $size; $c++) {
-                $mines[$r][$c]['bomb'] = (int) !(rand(1, 100) > $dificulty);
-                $mines[$r][$c]['open'] = 0;
-                $mines[$r][$c]['clicked'] = 0;
-                $mines[$r][$c]['marked'] = 0;
-                $mines[$r][$c]['show'] = null;
+                $mines['game'][$r][$c]['bomb'] = (int) !(rand(1, 100) > $dificulty);
+                $mines['game'][$r][$c]['open'] = 0;
+                $mines['game'][$r][$c]['clicked'] = 0;
+                $mines['game'][$r][$c]['marked'] = 0;
+                $mines['game'][$r][$c]['show'] = null;
             }
         }
 
-        $request->user()->minesweepers()->create([
+        $minesweeper = $request->user()->minesweepers()->create([
             'mines' => serialize($mines)
         ]);
 
-        return response(['mines' => $mines], 201);
+        return response([
+            'id'    => $minesweeper->id,
+            'mines' => $mines
+        ], 201);
     }
 
     /**
@@ -55,7 +60,10 @@ class MinesweeperController extends Controller
      */
     public function show(Minesweeper $minesweeper)
     {
-        //
+        return response([
+            'id'    => $minesweeper->id,
+            'mines' => unserialize($minesweeper->mines)
+        ], 200);
     }
 
     /**
@@ -67,17 +75,6 @@ class MinesweeperController extends Controller
      */
     public function update(Request $request, Minesweeper $minesweeper)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Minesweeper  $minesweeper
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Minesweeper $minesweeper)
-    {
-        //
+        $minesweeper->update(['mines' => serialize($request->input('mines'))]);
     }
 }

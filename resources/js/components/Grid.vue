@@ -20,7 +20,11 @@
 
         computed: {
             mines() {
-                return this.sharedData.mines
+                return this.sharedData.mines.game
+            },
+
+            status() {
+                return this.sharedData.mines.status
             },
 
             minesLength() {
@@ -38,11 +42,16 @@
         methods: {
 
             click(row, col) {
+                if (this.sharedData.mines.status == 'closed') {
+                    return
+                }
                 this.open(row, col)
-                this.sharedData.mines[row][col]['clicked'] = 1
+                this.sharedData.updated = true
+                this.sharedData.mines.game[row][col]['clicked'] = 1
 
-                if (this.sharedData.mines[row][col]['bomb']) {
-                    console.log('you lost')
+                if (this.sharedData.mines.game[row][col]['bomb']) {
+                    this.sharedData.mines.status = 'closed'
+                    this.$emit('lost', this)
                 } else {
                     let areBombsArround = this.checkSurroundingBombs(row, col)
                     if (!areBombsArround) {
@@ -60,7 +69,7 @@
                 }
                 
                 if (bombsAround >= 1 && this.isNotOutside(row, col)) {
-                    this.sharedData.mines[row][col]['show'] = bombsAround
+                    this.sharedData.mines.game[row][col]['show'] = bombsAround
                     return true
                 }
                 return false
@@ -73,7 +82,7 @@
                         this.open(row + ir, col + ic)
                         let areBombsArround = this.checkSurroundingBombs(row + ir, col + ic)
                         if (!areBombsArround && this.isNotOutside(row + ir, col + ic)) {
-                            if (!this.sharedData.mines[row + ir][col + ic]['clicked']) {
+                            if (!this.sharedData.mines.game[row + ir][col + ic]['clicked']) {
                                 noBomsRows.push({
                                     row: row + ir,
                                     col: col + ic,
@@ -90,13 +99,13 @@
 
             open(row, col) {
                 if(this.isNotOutside(row, col)) {
-                    this.sharedData.mines[row][col]['open'] = 1
+                    this.sharedData.mines.game[row][col]['open'] = 1
                 }
             },
 
             isBomb(row, col) {
                 if (this.isNotOutside(row, col)) {
-                    return this.sharedData.mines[row][col]['bomb']
+                    return this.sharedData.mines.game[row][col]['bomb']
                 }
 
                 return 0
