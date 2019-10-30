@@ -3,11 +3,13 @@
         <span v-for="(mineArray, row) in mines" class="mines-row">
             <span 
                 v-for="(mine, col) in mineArray"
-                @click="click(row, col)"
+                @click.left="click(row, col)"
+                @click.right.prevent="flag(row, col)"
                 class="mines-element"
                 :class="{ 'mine-open': mine.open && !mine.bomb, 'mine-exploded': mine.open && mine.bomb }" 
                 :style="minesStyle"
                 :row="row" :col="col">
+                <i class="fa fa-flag" aria-hidden="true" v-if="mine.flagged"></i>
                 {{ mine.show }}
             </span>
         </span>
@@ -42,7 +44,7 @@
         methods: {
 
             click(row, col) {
-                if (this.sharedData.mines.status == 'closed') {
+                if (this.sharedData.mines.status == 'closed' || this.sharedData.mines.game[row][col]['flagged']) {
                     return
                 }
                 this.open(row, col)
@@ -58,6 +60,10 @@
                         this.openSurroundingBombs(row, col)
                     }
                 }
+            },
+
+            flag (row, col) {
+                this.sharedData.mines.game[row][col]['flagged'] = !this.sharedData.mines.game[row][col]['flagged']
             },
 
             checkSurroundingBombs(row, col) {

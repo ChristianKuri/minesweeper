@@ -37,7 +37,7 @@ class MinesweeperController extends Controller
                 $mines['game'][$r][$c]['bomb'] = (int) !(rand(1, 100) > $dificulty);
                 $mines['game'][$r][$c]['open'] = 0;
                 $mines['game'][$r][$c]['clicked'] = 0;
-                $mines['game'][$r][$c]['marked'] = 0;
+                $mines['game'][$r][$c]['flagged'] = 0;
                 $mines['game'][$r][$c]['show'] = null;
             }
         }

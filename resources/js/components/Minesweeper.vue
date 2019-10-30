@@ -1,11 +1,23 @@
 <template>
     <div>
-        <button type="button" class="btn btn-primary" @click="createMinesweeper">Create New Minesweeper</button>
-        <button type="button" class="btn btn-primary" @click="loadOlds">Load Old Minesweepers</button>
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-primary" @click="createMinesweeper">Create New Minesweeper</button>
+            <button type="button" class="btn btn-primary" @click="loadOlds">Load Old Minesweepers</button>
+        </div>
+        <div class="d-flex mt-2">
+            <div class="form-group">
+                <label for="size">Size</label>
+                <input type="number" name="size" id="size" class="form-control" placeholder="size" v-model="presets.size" min="1" max="24">
+            </div>
+            <div class="form-group">
+                <label for="dificulty">Dificulty</label>
+                <input type="number" name="dificulty" id="dificulty" class="form-control" placeholder="dificulty" v-model="presets.dificulty" min="1" max="100">
+            </div>
+        </div>
         <hr>
         <grid ref="grid" @lost="lost"></grid>
         <ul>
-            <li v-for="minesweeper in oldMinesweppers" @click="load(minesweeper.id)">{{ minesweeper.created_at }}</li>
+            <li v-for="minesweeper in oldMinesweppers" @click="load(minesweeper.id)" class="clickable">{{ minesweeper.created_at }}</li>
         </ul>  
     </div>
 </template>
@@ -37,13 +49,17 @@ export default {
                 id: Number,
                 updated: false
             },
-            oldMinesweppers: Array
+            oldMinesweppers: Array,
+            presets: {
+                size: Number,
+                dificulty: Number
+            }
         }
     },
 
     methods: {
         createMinesweeper () {
-            axios.post(this.minesweeperRoute)
+            axios.post(this.minesweeperRoute, this.presets)
                 .then((response) => {
                     this.sharedData.mines = response.data.mines
                     this.sharedData.id = response.data.id
@@ -103,4 +119,7 @@ export default {
 </script>
 
 <style>
+.clickable {
+    cursor: pointer;
+}
 </style>

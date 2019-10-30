@@ -20,6 +20,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Instructions</div>
+                <div class="card-body">
+                    <ul>
+                        <li>You can flag a field by right clicking into it.</li>
+                        <li>You can remove the flag by right clicking into it again.</li>
+                        <li>The size input accepts between 1 and 24</li>
+                        <li>The dificulty accepts between 1 and 100 (higher is harder)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
