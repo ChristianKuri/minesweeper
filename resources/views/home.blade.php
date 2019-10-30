@@ -14,7 +14,9 @@
                         </div>
                     @endif
 
-                    <minesweeper></minesweeper>
+                    <minesweeper
+                        minesweeper-route="{{ route('minesweeper.index') }}"
+                    ></minesweeper>
                 </div>
             </div>
         </div>

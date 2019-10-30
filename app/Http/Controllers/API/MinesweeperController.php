@@ -27,18 +27,24 @@ class MinesweeperController extends Controller
     public function store(Request $request)
     {
         $size = $request->input('size') ?? 12;
-        $dificulty = $request->input('dificulty') ?? 10; // higher is harder (between 1 and 100)
+        $dificulty = $request->input('dificulty') ?? 15; // higher is harder (between 1 and 100)
         $mines = [];
 
         for ($r = 0; $r < $size; $r++) {
             for ($c = 0; $c < $size; $c++) {
-                $mines[$r][$c] = (int) !(rand(1, 100) > $dificulty);
+                $mines[$r][$c]['bomb'] = (int) !(rand(1, 100) > $dificulty);
+                $mines[$r][$c]['open'] = 0;
+                $mines[$r][$c]['clicked'] = 0;
+                $mines[$r][$c]['marked'] = 0;
+                $mines[$r][$c]['show'] = null;
             }
         }
 
         $request->user()->minesweepers()->create([
             'mines' => serialize($mines)
         ]);
+
+        return response(['mines' => $mines], 201);
     }
 
     /**
