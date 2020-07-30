@@ -1,5 +1,5 @@
 # A Minesweeper game
-This was a 8 hour project!
+This was a 8 hour code challenge!
 
 # Instructions to play
 - You can flag a field by right clicking into it.
