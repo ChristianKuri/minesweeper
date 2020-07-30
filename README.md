@@ -1,6 +1,5 @@
-# I really liked this minesweeper project
-I didnt add validation since this is a fast project and it wasnt necesary
-
+# A Minesweeper game
+This was a 8 hour project!
 
 # Instructions to play
 - You can flag a field by right clicking into it.
